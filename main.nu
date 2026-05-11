@@ -21,6 +21,15 @@ def main [] {
   print -e "          ./main.nu sync dae sth-new --rev 'rev_hash'"
 }
 
+def extract_wanted_hash [stderr: string] {
+  let matches = $stderr | parse --regex 'got:\s+(?P<hash>sha256-[A-Za-z0-9+/=]+)'
+  if (($matches | length) == 0) {
+    return null
+  }
+
+  $matches | last | get hash
+}
+
 # ./main.nu sync dae release unstable
 def "main sync" [
                 project: string,
@@ -43,7 +52,11 @@ def "main sync" [
     }
     let stderr = $res.stderr;
     log info $"got stderr:(char newline)($stderr)";
-    let vendor_hash = $stderr | lines | find --regex "got:" -n | str trim | split row " " | last
+    let vendor_hash = extract_wanted_hash $stderr
+    if ($vendor_hash == null) {
+      log error "failed to extract vendorHash from build output"
+      exit 1
+    }
     $vendor_hash
   }
   mut metadata = open ./metadata.json
@@ -130,7 +143,7 @@ def "main sync" [
     let new_vendor_hash = do $get_vendor_hash $v;
     if ($new_vendor_hash == null) {
       log info "skip modify vendorHash"
-      return;
+      continue;
     }
     $metadata = $metadata | update $project { update $v { update vendorHash $new_vendor_hash } };
   }

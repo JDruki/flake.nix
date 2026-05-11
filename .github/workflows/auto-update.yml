@@ -1,0 +1,55 @@
+name: Auto update dae
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run after GitHub's daily release/tag churn has usually settled.
+    - cron: "23 4 * * *"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: auto-update-dae
+  cancel-in-progress: false
+
+jobs:
+  auto-update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+      - uses: DeterminateSystems/flakehub-cache-action@main
+
+      - name: Update flake inputs
+        run: |
+          nix flake update
+
+      - name: Update dae release and unstable metadata
+        run: |
+          nix develop -c ./main.nu sync dae release unstable
+
+      - name: Check packages
+        run: |
+          nix build .#dae-release .#dae-unstable
+          nix flake check -v
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: auto/update-dae
+          delete-branch: true
+          title: "chore: auto update dae"
+          commit-message: "chore: auto update dae"
+          body: |
+            Updates:
+            - flake.lock and dev/flake.lock inputs
+            - dae-release to the latest upstream GitHub release
+            - dae-unstable to the latest upstream main commit
+            - Go vendor hashes when upstream modules change
+          labels: |
+            automated-pr
+            chore
