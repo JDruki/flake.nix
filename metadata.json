@@ -1,16 +1,16 @@
 {
   "dae": {
     "release": {
-      "version": "v1.0.0",
-      "rev": "v1.0.0",
-      "hash": "sha256-RpbWZEoGrCq3Py0hu6YDie6ErDTLS3oabqScPzhCtm0=",
-      "vendorHash": "sha256-u2DCHmX7vRNWIQ2Ir3UrxPGduggEqoUr1rnkDfwsT0I="
+      "version": "v1.1.0",
+      "rev": "v1.1.0",
+      "hash": "sha256-Kc51VQuqObxKXVXGv5CnDm4/3XYqjPvrpAQSVb2vxSM=",
+      "vendorHash": "sha256-juxIsZt1T33epN8CbzDc02MmlW5PtYa4pcGxuX9OpH4="
     },
     "unstable": {
-      "version": "unstable-2026-02-20.030902f",
-      "rev": "030902f519f5b63f839327fd2fa9d8f906f4c504",
-      "hash": "sha256-wIka/hzF2MzLebrgUHOB+BaRIEx4cD3TXPV9uqP9m7U=",
-      "vendorHash": "sha256-MJVmAg+xyS53295FZ5HYB4rfbWHjUFBkxIOBxqxQP3U="
+      "version": "unstable-2026-05-06.c7e0296",
+      "rev": "c7e02968f8baa425798b05dd4ab4142e3c20f568",
+      "hash": "sha256-61yNOhRPSH5+Y4Y7G1hi3OHxkTBa4FpaA5JRUYIQETE=",
+      "vendorHash": "sha256-Bf2OgF3+dOC2LiD/2Y+g+tfc07ZctdRH/BAUO23fX6k="
     }
   },
   "daed": {
